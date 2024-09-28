@@ -63,6 +63,15 @@ Responsavel por consumir a API [Api.Codigox] e exibir os dados do cep informado 
 # Considerações
 Creio que com a sulução apresentada nesse projeto atende 100% do que foi solicitado no projeto.
 
+# Testes Unitarios
+Os 2 projetos possui testes unitarios criado no DUnit conforme foi solicitado no desafio. Criei um pequeno cenario devido ao tempo do desafio.
+
+# Teste Front-End
+![image](https://github.com/user-attachments/assets/e8872b24-306f-4f36-8425-739e9df1fa7f)
+
+# Teste API.
+![image](https://github.com/user-attachments/assets/acef870b-f216-43f8-bf24-29621b1b9ea9)
+
 - # Autor
 Alan Candido Borges Barreto
 (https://www.linkedin.com/in/alan-candido-borges-barreto-303240176/)
