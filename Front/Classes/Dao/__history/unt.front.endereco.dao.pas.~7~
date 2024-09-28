@@ -1,0 +1,30 @@
+unit unt.front.endereco.dao;
+
+interface
+
+uses
+  REST.Types,
+  REST.Client,
+  REST.Json,
+  System.JSON,
+  System.SysUtils,
+  frm.dm.front,
+  unt.endereco.model;
+
+type
+  TFEnderecoDados = class
+    private
+      FDM           : TFDM;
+      FMessageError : String;
+      FStatusCode   : Integer;
+      FEndereco     : TEndereco;
+      FBaseUrl      : String;
+
+    public
+
+  end;
+
+
+implementation
+
+end.

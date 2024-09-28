@@ -1,0 +1,81 @@
+program api.codigox;
+
+{$APPTYPE CONSOLE}
+
+{$R *.res}
+
+uses
+  Horse,
+  Horse.GBSwagger,
+  System.JSON,
+  Rest.Json,
+  System.SysUtils,
+  unt.endereco.model in '..\Comuns\Classes\Model\unt.endereco.model.pas',
+  unt.DM in 'Classes\Dao\unt.DM.pas' {frmDM: TDataModule},
+  unt.endereco.dao in 'Classes\Dao\unt.endereco.dao.pas',
+  unt.endreco.controller in 'Classes\Controller\unt.endreco.controller.pas',
+  unt.endereco.dto in '..\Comuns\Classes\Dto\unt.endereco.dto.pas',
+  unt.api.error in 'Classes\Handlers\unt.api.error.pas';
+
+begin
+  THorse.Use(HorseSwagger); // Access http://localhost:9000/swagger/doc/html
+
+  Swagger
+      .BasePath('v1')
+      .Path('buscacep')
+        .Tag('cep')
+        .GET('Busca cep', 'realiza consulta de um cep')
+          .AddParamPath('cep', 'Numero do cep para ser consultado')
+            .Schema(SWAG_STRING)
+          .&End
+          .AddResponse(200, 'operaçao realizada com sucesso')
+            .Schema(TEnderecoDto)
+            .IsArray(false)
+          .&End
+          .AddResponse(400, 'Bad Request')
+            .Schema(TAPIError)
+          .&End
+          .AddResponse(500, 'Internal Server Error')
+            .Schema(TAPIError)
+          .&End
+        .&End
+      .&End
+    .&End;
+
+  {Podeeria ter criado a controler da coonsulta exemplo: Controllers.buscacep.Registry
+  porem como temos um unico endpoint crei por aqui memos}
+  THorse.Get('/buscacep/:cep',
+    procedure(Req: THorseRequest; Res: THorseResponse)
+    var
+      LController: TEnderecoController;
+      LEndereco  : TEnderecoDto;
+      lJsonObjetc: TJSONObject;
+      ApiErro    : TAPIError;
+    begin
+      LController := TEnderecoController.Create;
+      LEndereco   := TEnderecoDto.Create;
+      try
+        LEndereco := LController.Load(Req.Params.Items['cep']);
+        if LController.getStatusCode = 200  then
+        begin
+           lJsonObjetc := TJson.ObjectToJsonObject(LEndereco);
+           Res.Send(lJsonObjetc.Format);
+        end
+        else
+        begin
+           ApiErro := TAPIError.Create;
+           try
+             ApiErro.error := LController.getMessageError;
+             Res.Status(LController.getStatusCode).Send(LController.getMessageError);
+           finally
+             ApiErro.Free
+           end;
+        end;
+      finally
+        LEndereco.Free;
+        LController.Free;
+      end;
+    end);
+  THorse.Listen(9000);
+
+end.

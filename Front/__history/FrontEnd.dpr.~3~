@@ -1,0 +1,18 @@
+program FrontEnd;
+
+uses
+  Vcl.Forms,
+  unt.MenuPrin.view in 'Classes\Views\unt.MenuPrin.view.pas' {frmMenuPrin},
+  frm.dm.front in 'Classes\Dao\frm.dm.front.pas' {FDM: TDataModule},
+  unt.endereco.model in '..\Comuns\Classes\Model\unt.endereco.model.pas',
+  unt.front.endereco.controller in 'Classes\Controller\unt.front.endereco.controller.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TfrmMenuPrin, frmMenuPrin);
+  Application.CreateForm(TFDM, FDM);
+  Application.Run;
+end.

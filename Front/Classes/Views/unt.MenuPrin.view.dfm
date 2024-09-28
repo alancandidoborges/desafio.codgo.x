@@ -1,0 +1,185 @@
+object frmMenuPrin: TfrmMenuPrin
+  Left = 0
+  Top = 0
+  BorderStyle = bsDialog
+  Caption = 'Consulta de Cep'
+  ClientHeight = 198
+  ClientWidth = 554
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object lblEndereco: TLabel
+    Left = 8
+    Top = 21
+    Width = 45
+    Height = 13
+    Caption = 'Endereco'
+  end
+  object lblCep: TLabel
+    Left = 375
+    Top = 21
+    Width = 19
+    Height = 13
+    Caption = 'CEP'
+  end
+  object lblComplemento: TLabel
+    Left = 8
+    Top = 64
+    Width = 65
+    Height = 13
+    Caption = 'Complemento'
+  end
+  object lblBairro: TLabel
+    Left = 375
+    Top = 67
+    Width = 32
+    Height = 13
+    Caption = 'Bairrro'
+  end
+  object lblGia: TLabel
+    Left = 8
+    Top = 112
+    Width = 15
+    Height = 13
+    Caption = 'Gia'
+  end
+  object lblIbge: TLabel
+    Left = 127
+    Top = 112
+    Width = 23
+    Height = 13
+    Caption = 'IBGE'
+  end
+  object lblLocalidade: TLabel
+    Left = 246
+    Top = 112
+    Width = 50
+    Height = 13
+    Caption = 'Localidade'
+  end
+  object lblSiaf: TLabel
+    Left = 372
+    Top = 112
+    Width = 18
+    Height = 13
+    Caption = 'Siaf'
+  end
+  object lblUF: TLabel
+    Left = 473
+    Top = 112
+    Width = 17
+    Height = 13
+    Caption = 'U.F'
+  end
+  object btnCep: TButton
+    Left = 468
+    Top = 38
+    Width = 75
+    Height = 25
+    Caption = 'Busca Cep'
+    TabOrder = 0
+    OnClick = btnCepClick
+  end
+  object EdtEndereco: TEdit
+    Left = 8
+    Top = 40
+    Width = 361
+    Height = 21
+    CharCase = ecUpperCase
+    ReadOnly = True
+    TabOrder = 1
+  end
+  object edtCep: TMaskEdit
+    Left = 375
+    Top = 40
+    Width = 87
+    Height = 21
+    CharCase = ecUpperCase
+    EditMask = '99999-999;1;_'
+    MaxLength = 9
+    TabOrder = 2
+    Text = '     -   '
+  end
+  object edtComplemento: TEdit
+    Left = 8
+    Top = 83
+    Width = 361
+    Height = 21
+    CharCase = ecUpperCase
+    ReadOnly = True
+    TabOrder = 3
+  end
+  object edtBairro: TEdit
+    Left = 375
+    Top = 83
+    Width = 169
+    Height = 21
+    CharCase = ecUpperCase
+    ReadOnly = True
+    TabOrder = 4
+  end
+  object EdtGia: TEdit
+    Left = 8
+    Top = 131
+    Width = 113
+    Height = 21
+    CharCase = ecUpperCase
+    ReadOnly = True
+    TabOrder = 5
+  end
+  object edtIbge: TEdit
+    Left = 127
+    Top = 131
+    Width = 113
+    Height = 21
+    CharCase = ecUpperCase
+    ReadOnly = True
+    TabOrder = 6
+  end
+  object edtLocalidade: TEdit
+    Left = 246
+    Top = 131
+    Width = 120
+    Height = 21
+    CharCase = ecUpperCase
+    ReadOnly = True
+    TabOrder = 7
+  end
+  object EdtSiaf: TEdit
+    Left = 372
+    Top = 131
+    Width = 91
+    Height = 21
+    CharCase = ecUpperCase
+    ReadOnly = True
+    TabOrder = 8
+  end
+  object EdtUF: TEdit
+    Left = 469
+    Top = 131
+    Width = 75
+    Height = 21
+    CharCase = ecUpperCase
+    ReadOnly = True
+    TabOrder = 9
+  end
+  object btnSair: TButton
+    Left = 471
+    Top = 165
+    Width = 75
+    Height = 25
+    Caption = 'Sair'
+    TabOrder = 10
+    OnClick = btnSairClick
+  end
+end

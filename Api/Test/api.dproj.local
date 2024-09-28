@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2024/09/28 10:02:32.279,=C:\Desafio_CodigoX\Api\Test\Testunt.endereco.pas</Transaction>
+    <Transaction>2024/09/28 10:02:33.601,=C:\Desafio_CodigoX\Api\Classes\Dao\unt.endereco.dao.pas</Transaction>
+    <Transaction>2024/09/28 10:03:12.747,=C:\Desafio_CodigoX\Api\Classes\Dao\unt.DM.pas</Transaction>
+    <Transaction>2024/09/28 10:03:42.734,=C:\Desafio_CodigoX\Comuns\Classes\Model\unt.endereco.model.pas</Transaction>
+    <Transaction>2024/09/28 10:03:58.160,=C:\Desafio_CodigoX\Comuns\Classes\Dto\unt.endereco.dto.pas</Transaction>
+    <Transaction>2024/09/28 10:06:48.926,C:\Desafio_CodigoX\Api\Test\Testunt.endereco.daoo.pas=C:\Desafio_CodigoX\Api\Test\Testunt.endereco.pas</Transaction>
+    <Transaction>2024/09/28 10:07:37.612,=C:\Desafio_CodigoX\Api\Test\Testunt.endreco.pas</Transaction>
+    <Transaction>2024/09/28 10:07:37.808,=C:\Desafio_CodigoX\Api\Classes\Controller\unt.endreco.controller.pas</Transaction>
+    <Transaction>2024/09/28 10:09:10.123,C:\Desafio_CodigoX\Api\Test\Testunt.endreco.controller.pas=C:\Desafio_CodigoX\Api\Test\Testunt.endreco.pas</Transaction>
+  </Transactions>
+</BorlandProject>

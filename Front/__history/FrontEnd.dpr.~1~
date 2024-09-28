@@ -1,0 +1,14 @@
+program FrontEnd;
+
+uses
+  Vcl.Forms,
+  unt.MenuPrin.view in 'Classes\Views\unt.MenuPrin.view.pas' {Form1};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TForm1, Form1);
+  Application.Run;
+end.

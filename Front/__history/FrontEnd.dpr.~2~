@@ -1,0 +1,16 @@
+program FrontEnd;
+
+uses
+  Vcl.Forms,
+  unt.MenuPrin.view in 'Classes\Views\unt.MenuPrin.view.pas' {Form1},
+  frm.dm.front in 'Classes\Dao\frm.dm.front.pas' {DataModule1: TDataModule};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TForm1, Form1);
+  Application.CreateForm(TDataModule1, DataModule1);
+  Application.Run;
+end.

@@ -1,0 +1,182 @@
+unit unt.endereco.dao;
+
+interface
+
+uses
+  unt.endereco.model,
+  unt.DM,
+  REST.Types,
+  REST.Client,
+  REST.Json,
+  System.JSON,
+  System.SysUtils, unt.endereco.dto;
+type
+  TEnderecoDao = class
+  private
+    FDM           : TfrmDM;
+    FMessageError : String;
+    FStatusCode   : Integer;
+    FEndereco     : TEndereco;
+
+    FBaseUrlViaCep: String;
+    FBaseUrlApiCep: String;
+    FAweSomeApi   : String;
+
+    procedure setStatusCode(AValue: Integer);
+    procedure setMessageError(AValue: String);
+    procedure ConsultaCep(ABaseUrl: String);
+
+    {Crie essas procedure para fazer o parse de cada api para a classe endereco
+    devido a ser um teste porem poderiamos usar a RTTI para mapear o objeto
+    de acordo com o json ou criar um helper}
+    procedure ParseApiCep(AValue: String);
+    procedure ParseAweSomeApi(AValue: String);
+    function ParseDto: TEnderecoDto;
+
+  public
+    constructor Create();
+    destructor Destroy; Override;
+
+    function getStatusCode: Integer;
+    function getMessageError: String;
+    function Load(ACep: String): TEnderecoDto;
+  end;
+
+implementation
+
+constructor TEnderecoDao.Create();
+begin
+  FEndereco := TEndereco.Create;
+  FDM       := TfrmDM.Create(nil);
+end;
+
+destructor TEnderecoDao.Destroy;
+begin
+  inherited;
+  FDM.Free;
+end;
+
+{Poderiamos usar a RTTI para mapear o objeto FEndereco}
+procedure TEnderecoDao.ParseAweSomeApi(AValue: String);
+var
+  lJSonValue : TJSonValue;
+begin
+  lJSonValue           := TJSonObject.ParseJSONValue(AValue);
+  FEndereco.Cep        := lJSonValue.GetValue<string>('cep');
+  FEndereco.Logradouro := lJSonValue.GetValue<string>('address_name');
+  FEndereco.Bairro     := lJSonValue.GetValue<string>('district');
+  FEndereco.Localidade := lJSonValue.GetValue<string>('city');
+  FEndereco.Uf         := lJSonValue.GetValue<string>('state');
+  FEndereco.Ibge       := lJSonValue.GetValue<string>('city_ibge');
+end;
+
+function TEnderecoDao.ParseDto: TEnderecoDto;
+var
+  LEnderecoDto: TEnderecoDto;
+begin
+  LEnderecoDto := TEnderecoDto.Create;
+  try
+    LEnderecoDto.Cep         := LEnderecoDto.Cep;
+    LEnderecoDto.Logradouro  := LEnderecoDto.Logradouro;
+    LEnderecoDto.Complemento := LEnderecoDto.Complemento;
+    LEnderecoDto.Unidade     := LEnderecoDto.Unidade;
+    LEnderecoDto.Bairro      := LEnderecoDto.Bairro;
+    LEnderecoDto.Localidade  := LEnderecoDto.Localidade;
+    LEnderecoDto.Uf          := LEnderecoDto.Uf;
+    LEnderecoDto.Estado      := LEnderecoDto.Estado;
+    LEnderecoDto.Regiao      := LEnderecoDto.Regiao;
+    LEnderecoDto.Ibge        := LEnderecoDto.Ibge;
+    LEnderecoDto.Gia         := LEnderecoDto.Gia;
+    LEnderecoDto.Ddd         := LEnderecoDto.Ddd;
+    LEnderecoDto.Siafi       := LEnderecoDto.Siafi;
+    result := LEnderecoDto;
+  finally
+    LEnderecoDto.Free;
+  end;
+end;
+
+procedure TEnderecoDao.ParseApiCep(AValue: String);
+var
+  lJSonValue : TJSonValue;
+begin
+  {Poderiamos usar a RTTI para mapear o objeto FEndereco}
+  lJSonValue           := TJSonObject.ParseJSONValue(AValue);
+  FEndereco.Cep        := lJSonValue.GetValue<string>('code');
+  FEndereco.Logradouro := lJSonValue.GetValue<string>('address');
+  FEndereco.Bairro     := lJSonValue.GetValue<string>('district');
+  FEndereco.Localidade := lJSonValue.GetValue<string>('city');
+  FEndereco.Uf         := lJSonValue.GetValue<string>('state');
+end;
+
+procedure TEnderecoDao.ConsultaCep(ABaseUrl: String);
+begin
+  try
+    FDM.RESTRequest.Method := rmGET;
+    FDM.RESTClient.BaseURL := ABaseUrl;
+    FDM.RESTClient.Accept  := 'application/json';
+    FDM.RESTRequest.Execute;
+    setStatusCode(FDM.RESTRequest.Response.StatusCode);
+  except
+    setMessageError(FDM.RESTRequest.Response.StatusText);
+  end;
+end;
+
+function TEnderecoDao.getStatusCode: Integer;
+begin
+  Result := FStatusCode;
+end;
+
+function TEnderecoDao.getMessageError: String;
+begin
+  Result := FMessageError;
+end;
+
+function TEnderecoDao.Load(ACep: String): TEnderecoDto;
+begin
+  {Estou deixando endereco fixo devido a ser um teste porem poderiamos criar
+  um arquivo.ini para buscar essas informacoes por parametro.}
+  FBaseUrlViaCep :=  'viacep.com.br/ws/' + ACep + '/json/' ;
+  FBaseUrlApiCep :=  'https://cdn.apicep.com/file/apicep/' + ACep + '.json';
+  FAweSomeApi    :=  'https://cep.awesomeapi.com.br/json/' + ACep;
+
+  try
+    if Length(ACep) < 8 then
+    begin
+      setStatusCode(404);
+      setMessageError('Cep informado invalido');
+      Exit;
+    end;
+
+    ConsultaCep(FBaseUrlViaCep);
+    if getStatusCode = 200 then  //Criar um enum ou uma constantes
+      FEndereco := TJson.JsonToObject<TEndereco>(Trim(FDM.RESTRequest.Response.JSONText))
+    else
+    begin
+      ConsultaCep(FBaseUrlApiCep);
+      if getStatusCode = 200 then
+        ParseApiCep(Trim(FDM.RESTRequest.Response.JSONText))
+      else
+      begin
+        ConsultaCep(FAweSomeApi);
+        if getStatusCode = 200 then
+        begin
+          ParseAweSomeApi(Trim(FDM.RESTRequest.Response.JSONText))
+        end;
+      end;
+    end;
+  finally
+    Result := ParseDto;
+  end;
+end;
+
+procedure TEnderecoDao.setMessageError(AValue: String);
+begin
+  FMessageError := AValue;
+end;
+
+procedure TEnderecoDao.setStatusCode(AValue: Integer);
+begin
+  FStatusCode := AValue;
+end;
+
+end.

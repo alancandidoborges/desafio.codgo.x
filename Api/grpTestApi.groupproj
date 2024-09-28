@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{106BC819-BECF-4455-8E1B-69EA6D9CAB79}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="api.codigox.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Test\api.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="api_codigox">
+        <MSBuild Projects="api.codigox.dproj"/>
+    </Target>
+    <Target Name="api_codigox:Clean">
+        <MSBuild Projects="api.codigox.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="api_codigox:Make">
+        <MSBuild Projects="api.codigox.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="api">
+        <MSBuild Projects="Test\api.dproj"/>
+    </Target>
+    <Target Name="api:Clean">
+        <MSBuild Projects="Test\api.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="api:Make">
+        <MSBuild Projects="Test\api.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="api_codigox;api"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="api_codigox:Clean;api:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="api_codigox:Make;api:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

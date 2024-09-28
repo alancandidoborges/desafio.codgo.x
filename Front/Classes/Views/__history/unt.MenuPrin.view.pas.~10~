@@ -1,0 +1,143 @@
+unit unt.MenuPrin.view;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Mask, Vcl.StdCtrls,
+  unt.endereco.model, unt.front.endereco.controller, unt.front.endereco.dao;
+
+type
+  TfrmMenuPrin = class(TForm)
+    lblEndereco: TLabel;
+    lblCep: TLabel;
+    lblComplemento: TLabel;
+    lblBairro: TLabel;
+    lblGia: TLabel;
+    lblIbge: TLabel;
+    lblLocalidade: TLabel;
+    lblSiaf: TLabel;
+    lblUF: TLabel;
+    btnCep: TButton;
+    EdtEndereco: TEdit;
+    edtCep: TMaskEdit;
+    edtComplemento: TEdit;
+    edtBairro: TEdit;
+    EdtGia: TEdit;
+    edtIbge: TEdit;
+    edtLocalidade: TEdit;
+    EdtSiaf: TEdit;
+    EdtUF: TEdit;
+    btnSair: TButton;
+    procedure btnSairClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure btnCepClick(Sender: TObject);
+  private
+    FController: TFEnderecoController;
+    procedure LimparTela;
+  public
+    Function ValidarCEP(const ACep: string): Boolean;
+    Function FormatarCep(AValue: String): String;
+  end;
+
+var
+  frmMenuPrin: TfrmMenuPrin;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmMenuPrin.btnCepClick(Sender: TObject);
+var
+  lEndereco   : TEndereco;
+begin
+  if not ValidarCEP(edtCep.Text) then
+    Exit;
+
+  lEndereco := TEndereco.Create;
+  try
+    lEndereco := FController.Load(edtCep.Text);
+    if Assigned(lEndereco) then
+    begin
+      LimparTela();
+      edtCep.Text         := FormatarCep(lEndereco.Cep);
+      EdtEndereco.Text    := lEndereco.Logradouro;
+      edtComplemento.Text := lEndereco.Complemento;
+      edtBairro.Text      := lEndereco.Bairro;
+      EdtGia.Text         := lEndereco.Gia;
+      edtIbge.Text        := lEndereco.Ibge;
+      edtLocalidade.Text  := lEndereco.Localidade;
+      EdtSiaf.Text        := lEndereco.Siafi;
+      EdtUF.Text          := lEndereco.Uf;
+    end
+    else
+    begin
+      if FController.getStatusCode > 201 then
+        ShowMessage(FController.getMessageError);
+    end;
+  finally
+    lEndereco.Free;
+  end;
+end;
+
+procedure TfrmMenuPrin.btnSairClick(Sender: TObject);
+begin
+  Close;
+end;
+
+function TfrmMenuPrin.FormatarCep(AValue: String): String;
+var
+  i: Integer;
+begin
+  for i := 1 to Length(AValue) do
+    if AValue[i] in ['0'..'9'] then
+      Result := Result + AValue[i];
+  Result := Copy(Result, 1, 5) + '-' + Copy(Result, 6, 3);
+end;
+
+procedure TfrmMenuPrin.FormCreate(Sender: TObject);
+begin
+  FController := TFEnderecoController.GetInstance();
+end;
+
+procedure TfrmMenuPrin.FormDestroy(Sender: TObject);
+begin
+  FController.Free;
+end;
+
+procedure TfrmMenuPrin.FormShow(Sender: TObject);
+begin
+  LimparTela();
+end;
+
+procedure TfrmMenuPrin.LimparTela;
+var
+  i : Integer;
+begin
+  for i := 0 to frmMenuPrin.ControlCount - 1 do
+  begin
+    if frmMenuPrin.Controls[i] is TEdit then
+      (frmMenuPrin.Controls[i] as TEdit).Clear
+    else
+    if frmMenuPrin.Controls[i] is TComboBox then
+      (frmMenuPrin.Controls[i] as TComboBox).ItemIndex := -1
+    else
+    if frmMenuPrin.Controls[i] is TCheckBox then
+      (frmMenuPrin.Controls[i] as TCheckBox).Checked := False
+    else
+    if frmMenuPrin.Controls[i] is TMaskEdit then
+      (frmMenuPrin.Controls[i] as TMaskEdit).Clear;
+  end;
+end;
+
+function TfrmMenuPrin.ValidarCEP(const ACep: string): Boolean;
+begin
+  if Length(Trim(ACep)) <> 9 then
+    raise Exception.Create('CEP inválido.')
+  else
+    Result := True;
+end;
+
+end.

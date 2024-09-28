@@ -1,0 +1,31 @@
+program FrontEndTests;
+{
+
+  Delphi DUnit Test Project
+  -------------------------
+  This project contains the DUnit test framework and the GUI/Console test runners.
+  Add "CONSOLE_TESTRUNNER" to the conditional defines entry in the project options
+  to use the console test runner.  Otherwise the GUI test runner will be used by
+  default.
+
+}
+
+{$IFDEF CONSOLE_TESTRUNNER}
+{$APPTYPE CONSOLE}
+{$ENDIF}
+
+uses
+  DUnitTestRunner,
+  Testunt.MenuPrin in 'Testunt.MenuPrin.pas',
+  unt.MenuPrin.view in '..\Classes\Views\unt.MenuPrin.view.pas',
+  frm.dm.front in '..\Classes\Dao\frm.dm.front.pas' {FDM: TDataModule},
+  unt.front.endereco.dao in '..\Classes\Dao\unt.front.endereco.dao.pas',
+  unt.front.endereco.controller in '..\Classes\Controller\unt.front.endereco.controller.pas',
+  unt.endereco.dto in '..\..\Comuns\Classes\Dto\unt.endereco.dto.pas';
+
+{SR *.RES}
+
+begin
+  DUnitTestRunner.RunRegisteredTests;
+end.
+

@@ -1,0 +1,14 @@
+unit unt.front.endereco.dao;
+
+interface
+
+type
+  TFEnderecoDados = class
+    public
+    private;
+  end;
+
+
+implementation
+
+end.

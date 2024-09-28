@@ -1,0 +1,33 @@
+unit unt.lib;
+
+interface
+
+uses
+  System.Utils;
+
+implementation
+
+type
+  TLib = class
+  public
+    Function ValidarCEP(const ACep: string): Boolean;
+    Function FormatarCep(AValue: String): String;
+  end;
+
+
+var
+  Lib: TLib;
+
+{ TLib }
+
+function TLib.FormatarCep(AValue: String): String;
+begin
+
+end;
+
+function TLib.ValidarCEP(const ACep: string): Boolean;
+begin
+
+end;
+
+end.

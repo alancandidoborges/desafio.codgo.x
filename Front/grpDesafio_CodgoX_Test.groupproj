@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{F1C6561D-DF0A-4880-B8CF-CC26942F2AAA}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="FrontEnd.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Test\FrontEndTests.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="FrontEnd">
+        <MSBuild Projects="FrontEnd.dproj"/>
+    </Target>
+    <Target Name="FrontEnd:Clean">
+        <MSBuild Projects="FrontEnd.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="FrontEnd:Make">
+        <MSBuild Projects="FrontEnd.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="FrontEndTests">
+        <MSBuild Projects="Test\FrontEndTests.dproj"/>
+    </Target>
+    <Target Name="FrontEndTests:Clean">
+        <MSBuild Projects="Test\FrontEndTests.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="FrontEndTests:Make">
+        <MSBuild Projects="Test\FrontEndTests.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="FrontEnd;FrontEndTests"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="FrontEnd:Clean;FrontEndTests:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="FrontEnd:Make;FrontEndTests:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
